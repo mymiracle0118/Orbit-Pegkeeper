@@ -29,11 +29,11 @@ pub fn is_init(e: &Env) -> bool { e.storage().instance().has(&DataKey::ADMIN) }
 ///
 /// ### Panics
 /// If the admin does not exist
-pub fn get_admin(e: &Env) -> Address {
+pub fn get_admin(e: &Env) -> Option<Address> {
     e.storage()
         .instance()
         .get(&DataKey::ADMIN)
-        .unwrap_optimized()
+        .unwrap_or_default()
 }
 
 /// Set a new admin
@@ -50,11 +50,11 @@ pub fn set_admin(e: &Env, new_admin: &Address) {
 ///
 /// ### Panics
 /// If the treasury does not exist
-pub fn get_treasury(e: &Env, token_address: Address) -> Address {
+pub fn get_treasury(e: &Env, token_address: Address) -> Option<Address> {
     e.storage()
         .instance()
         .get(&DataKey::TREASURY(token_address))
-        .unwrap_optimized()
+        .unwrap_or_default()
 }
 
 /// Set the treasury Address depending on token address
@@ -71,11 +71,11 @@ pub fn set_treasury(e: &Env, token_address: Address, treasury_address: &Address)
 ///
 /// ### Panics
 /// If the blend does not exist
-pub fn get_blend(e: &Env) -> Address {
+pub fn get_blend(e: &Env) -> Option<Address> {
     e.storage()
         .instance()
         .get(&DataKey::BLEND)
-        .unwrap_optimized()
+        .unwrap_or_default()
 }
 
 /// Set the blend Address
@@ -92,11 +92,11 @@ pub fn set_blend(e: &Env, blend: &Address) {
 ///
 /// ### Panics
 /// If the token does not exist
-pub fn get_token(e: &Env) -> Address {
+pub fn get_token(e: &Env) -> Option<Address> {
     e.storage()
         .instance()
         .get(&DataKey::SOROSWAP)
-        .unwrap_optimized()
+        .unwrap_or_default()
 }
 
 /// Set the token Address
