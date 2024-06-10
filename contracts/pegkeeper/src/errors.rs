@@ -14,5 +14,8 @@ pub enum PegkeeperError {
     UncorrectAmount = 103,
 
     /// unsufficient amount to repay
-    UnsufficientAmount = 104
+    InsufficientBalance = 104,
+
+    /// neagative balance of contract
+    NegativeBalance = 105
 }

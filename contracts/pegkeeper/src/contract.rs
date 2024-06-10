@@ -1,9 +1,10 @@
 #![no_std]
-use soroban_sdk::{Address, contract, contractimpl, Env};
+use soroban_sdk::{Address, contract, contractimpl, Env, token};
 use crate::{
     dependencies::treasury, 
     errors::PegkeeperError,
-    storage
+    storage,
+    balances
 };
 
 #[contract]
@@ -33,14 +34,26 @@ impl PegkeeperContract {
         
         Ok(())
     }
-    pub fn repay(env: Env, token_addres: Address, treasury_address: Address, amount: u128) -> Result<(), PegkeeperError> {
+    pub fn repay(env: Env, token_address: Address, treasury_address: Address, amount: i128, treasury_fee: i128) -> Result<(), PegkeeperError> {
         storage::extend_instance(&env);
-        
-        /// check balance of token of contract
-        
-        /// repay the arbitrage delta + flash loan amount to treasury
+    
+        // Check balance of token of contract
+        let balance = balances::get_balance(&env, token_address.clone());
+        if balance < 0 {
+            return Err(PegkeeperError::NegativeBalance);
+        }
+    
+        if balance < amount + treasury_fee {
+            return Err(PegkeeperError::InsufficientBalance);
+        }
+    
+        // Trades on any other protocols
+
+        // Repay the flash loan amount + treasury fee to treasury
+        balances::transfer_amount(&env, token_address, treasury_address, amount);
 
         Ok(())
     }
+    
 }
 
