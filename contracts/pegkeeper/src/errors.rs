@@ -4,6 +4,9 @@ use soroban_sdk::{self, contracterror};
 #[derive(Copy, Clone, Debug, Eq, PartialEq, PartialOrd, Ord)]
 #[repr(u32)]
 pub enum PegkeeperError {
+    /// already initialized
+    AlreadyInitializedError = 100,
+
     /// not yet initialized
     NotInitialized = 101,
     
@@ -16,6 +19,4 @@ pub enum PegkeeperError {
     /// unsufficient amount to repay
     InsufficientBalance = 104,
 
-    /// neagative balance of contract
-    NegativeBalance = 105
 }
