@@ -13,7 +13,8 @@ pub enum DataKey {
     ADMIN,
     TREASURY(Address), // mapping token address to treasury addres
     BLEND,
-    SOROSWAP
+    SOROSWAP,
+    BALANCE
 }
 /// Bump the instance rent for the contract
 pub fn extend_instance(e: &Env) {
@@ -29,11 +30,11 @@ pub fn is_init(e: &Env) -> bool { e.storage().instance().has(&DataKey::ADMIN) }
 ///
 /// ### Panics
 /// If the admin does not exist
-pub fn get_admin(e: &Env) -> Option<Address> {
+pub fn get_admin(e: &Env) -> Address {
     e.storage()
         .instance()
         .get(&DataKey::ADMIN)
-        .unwrap_or_default()
+        .unwrap_optimized()
 }
 
 /// Set a new admin
@@ -50,11 +51,11 @@ pub fn set_admin(e: &Env, new_admin: &Address) {
 ///
 /// ### Panics
 /// If the treasury does not exist
-pub fn get_treasury(e: &Env, token_address: Address) -> Option<Address> {
+pub fn get_treasury(e: &Env, token_address: Address) -> Address {
     e.storage()
         .instance()
         .get(&DataKey::TREASURY(token_address))
-        .unwrap_or_default()
+        .unwrap_optimized()
 }
 
 /// Set the treasury Address depending on token address
@@ -71,11 +72,11 @@ pub fn set_treasury(e: &Env, token_address: Address, treasury_address: &Address)
 ///
 /// ### Panics
 /// If the blend does not exist
-pub fn get_blend(e: &Env) -> Option<Address> {
+pub fn get_blend(e: &Env) -> Address {
     e.storage()
         .instance()
         .get(&DataKey::BLEND)
-        .unwrap_or_default()
+        .unwrap_optimized()
 }
 
 /// Set the blend Address
@@ -88,23 +89,42 @@ pub fn set_blend(e: &Env, blend: &Address) {
         .set(&DataKey::BLEND, blend);
 }
 
-/// Fetch the current token Address
+/// Fetch the current soroswap Address
 ///
 /// ### Panics
-/// If the token does not exist
-pub fn get_token(e: &Env) -> Option<Address> {
+/// If the soroswap does not exist
+pub fn get_soroswap(e: &Env) -> Address {
     e.storage()
         .instance()
         .get(&DataKey::SOROSWAP)
-        .unwrap_or_default()
+        .unwrap_optimized()
 }
 
-/// Set the token Address
+/// Set the soroswap Address
 ///
 /// ### Arguments
-/// * `token` - The Address for the token
-pub fn set_token(e: &Env, token: &Address) {
+/// * `soroswap` - The Address of the soroswap
+pub fn set_soroswap(e: &Env, soroswap: &Address) {
     e.storage()
         .instance()
-        .set(&DataKey::SOROSWAP, token);
+        .set(&DataKey::SOROSWAP, soroswap);
+}
+
+/// Fetch the current balance
+///
+pub fn get_balance(e: &Env) -> i128 {
+    e.storage()
+        .instance()
+        .get(&DataKey::BALANCE)
+        .unwrap_optimized()
+}
+
+/// Set the token balance
+///
+/// ### Arguments
+/// * `balance` - The balance of the contract
+pub fn set_balance(e: &Env, balance: &i128) {
+    e.storage()
+        .instance()
+        .set(&DataKey::BALANCE, balance);
 }
